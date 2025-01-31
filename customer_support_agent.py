@@ -99,11 +99,11 @@ if openai_api_key:
 
                 response = self.client.chat.completions.create(
                     model="gpt-4o-mini",
-                    messages=[{"role": "system", "content": "You are a data generation AI that created realistic customer profiles and order histories. Always response with valid JSON."},
-                              {"role": "user", "content": prompt}]
+                    messages=[{"role": "system", "content": "You are a data generation AI that created realistic customer profiles and order histories."},
+                              {"role": "user", "content": prompt}],
+                    response_format={"type": "json_object"}
                 )
-
-                customer_data =  json.loads(response.choices[0].message.content)
+                customer_data = json.loads(response.choices[0].message.content)
 
                 # add generated data to memory
                 for key, value in customer_data.items():
@@ -137,7 +137,7 @@ if openai_api_key:
     if st.sidebar.button("Generate Synthetic Data"):
         if customer_id:
             with st.spinner("Generating synthetic data..."):
-                st.session_state.customer_data= support_agent.generate_synthetic_data(customer_id)
+                st.session_state.customer_data = support_agent.generate_synthetic_data(customer_id)
                 if st.session_state.customer_data:
                     st.success("Synthetic data generated successfully!")
                 else:
